@@ -118,15 +118,27 @@ export class ValidatorFactory {
   private static validatorsDict: Record<Exercise, validatorChild> = {
     plank: PlankValidator,
   };
+  private static instance: ValidatorFactory | undefined = undefined;
 
-  private static validators: { [key: string]: Validator } = {};
+  private validators: Record<string, Validator>;
 
-  public static getValidator(exercise: Exercise) {
-    if (!ValidatorFactory.validators[exercise]) {
-      ValidatorFactory.validators[exercise] =
-        new ValidatorFactory.validatorsDict[exercise]();
+  private constructor() {
+    this.validators = {};
+  }
+
+  public static getInstance() {
+    if (!ValidatorFactory.instance) {
+      ValidatorFactory.instance = new ValidatorFactory();
     }
+    return ValidatorFactory.instance;
+  }
 
-    return ValidatorFactory.validators[exercise];
+  public getValidator(exercise: Exercise) {
+    if (!this.validators[exercise]) {
+      this.validators[exercise] = new ValidatorFactory.validatorsDict[
+        exercise
+      ]();
+    }
+    return this.validators[exercise];
   }
 }

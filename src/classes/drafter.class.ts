@@ -100,16 +100,25 @@ export class DrafterFactory {
   private static draftersDict: Record<Exercise, Constructor<Drafter>> = {
     plank: PlankDrafter,
   };
+  private static instance: DrafterFactory | undefined = undefined;
 
-  private static drafters: { [key: string]: Drafter } = {};
+  private drafters: Record<string, Drafter>;
 
-  public static getDrafter(exercise: Exercise) {
-    if (!DrafterFactory.drafters[exercise]) {
-      DrafterFactory.drafters[exercise] = new DrafterFactory.draftersDict[
-        exercise
-      ]();
+  private constructor() {
+    this.drafters = {};
+  }
+
+  public static getInstance() {
+    if (!DrafterFactory.instance) {
+      DrafterFactory.instance = new DrafterFactory();
     }
+    return DrafterFactory.instance;
+  }
 
-    return DrafterFactory.drafters[exercise];
+  public getDrafter(exercise: Exercise) {
+    if (!this.drafters[exercise]) {
+      this.drafters[exercise] = new DrafterFactory.draftersDict[exercise]();
+    }
+    return this.drafters[exercise];
   }
 }

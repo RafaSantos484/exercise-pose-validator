@@ -108,10 +108,12 @@ function CameraComponent({ selectedExercise, close }: CameraComponentProps) {
         return;
       }
 
-      const drafter = DrafterFactory.getDrafter(selectedExercise);
+      const drafterFactory = DrafterFactory.getInstance();
+      const drafter = drafterFactory.getDrafter(selectedExercise);
       drafter.draw(results, canvas, ctx);
 
-      const validator = ValidatorFactory.getValidator(selectedExercise);
+      const validatorFactory = ValidatorFactory.getInstance();
+      const validator = validatorFactory.getValidator(selectedExercise);
       const res = validator.validate(results);
       setExcersiseValidation(res);
     });
