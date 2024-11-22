@@ -54,6 +54,16 @@ body {
 
   .exercise-feedback-container {
     z-index: 1;
+    height: 95%;
+
+    > p {
+      background-color: black;
+      font-size: 1.2rem;
+      text-align: center;
+      padding: 0.7rem;
+      border-radius: 10px;
+      width: 70%;
+    }
   }
 }
 

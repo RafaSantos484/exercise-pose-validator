@@ -6,59 +6,55 @@ import { Constructor, Exercise } from "../types";
 
 class Drafter {
   protected selectedLandmarks: number[];
-  protected canvas: HTMLCanvasElement;
-  protected ctx: CanvasRenderingContext2D;
 
-  constructor(
-    canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D,
-    selectedLandmarks?: number[]
-  ) {
-    this.canvas = canvas;
-    this.ctx = ctx;
+  constructor(selectedLandmarks?: number[]) {
     this.selectedLandmarks = selectedLandmarks || [];
   }
 
   protected drawCircle(
+    canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
     p: Point3d,
     radius: number
   ) {
     ctx.beginPath();
-    ctx.arc(
-      p.x * this.canvas.width,
-      p.y * this.canvas.height,
-      radius,
-      0,
-      2 * Math.PI
-    );
+    ctx.arc(p.x * canvas.width, p.y * canvas.height, radius, 0, 2 * Math.PI);
     ctx.fill();
     ctx.stroke();
   }
-  protected drawLine(ctx: CanvasRenderingContext2D, p1: Point3d, p2: Point3d) {
+  protected drawLine(
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D,
+    p1: Point3d,
+    p2: Point3d
+  ) {
     ctx.beginPath();
-    ctx.moveTo(p1.x * this.canvas.width, p1.y * this.canvas.height);
-    ctx.lineTo(p2.x * this.canvas.width, p2.y * this.canvas.height);
+    ctx.moveTo(p1.x * canvas.width, p1.y * canvas.height);
+    ctx.lineTo(p2.x * canvas.width, p2.y * canvas.height);
     ctx.stroke();
   }
 
-  public draw(results: Results) {
-    this.ctx.fillStyle = "red";
-    this.ctx.strokeStyle = "red";
-    this.ctx.lineWidth = 2;
+  public draw(
+    results: Results,
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D
+  ) {
+    ctx.fillStyle = "red";
+    ctx.strokeStyle = "red";
+    ctx.lineWidth = 2;
 
     results.poseLandmarks.forEach((landmark, idx) => {
       if (!this.selectedLandmarks.includes(idx)) return;
 
       const point = new Point3d(landmark);
-      this.drawCircle(this.ctx, point, 4);
+      this.drawCircle(canvas, ctx, point, 4);
     });
   }
 }
 
 class PlankDrafter extends Drafter {
-  constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
-    super(canvas, ctx, [
+  constructor() {
+    super([
       landmarksDict.NOSE,
       landmarksDict.LEFT_ELBOW,
       landmarksDict.RIGHT_ELBOW,
@@ -73,26 +69,30 @@ class PlankDrafter extends Drafter {
     ]);
   }
 
-  public draw(results: Results) {
-    super.draw(results);
+  public draw(
+    results: Results,
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D
+  ) {
+    super.draw(results, canvas, ctx);
     const landmarks = results.poseLandmarks;
 
     const nosePoint = new Point3d(landmarks[landmarksDict.NOSE]);
 
     const shoulderMidPoint = Utils.getMidShoulderPoint(landmarks);
-    this.drawLine(this.ctx, nosePoint, shoulderMidPoint);
+    this.drawLine(canvas, ctx, nosePoint, shoulderMidPoint);
 
     const hipMidPoint = Utils.getMidHipPoint(landmarks);
-    this.drawLine(this.ctx, shoulderMidPoint, hipMidPoint);
+    this.drawLine(canvas, ctx, shoulderMidPoint, hipMidPoint);
 
     const kneeMidPoint = Utils.getMidKneePoint(landmarks);
-    this.drawLine(this.ctx, hipMidPoint, kneeMidPoint);
+    this.drawLine(canvas, ctx, hipMidPoint, kneeMidPoint);
 
     const heelMidPoint = Utils.getMidHeelPoint(landmarks);
-    this.drawLine(this.ctx, kneeMidPoint, heelMidPoint);
+    this.drawLine(canvas, ctx, kneeMidPoint, heelMidPoint);
 
     const elbowMidPoint = Utils.getMidElbowPoint(landmarks);
-    this.drawLine(this.ctx, shoulderMidPoint, elbowMidPoint);
+    this.drawLine(canvas, ctx, shoulderMidPoint, elbowMidPoint);
   }
 }
 
@@ -103,15 +103,11 @@ export class DrafterFactory {
 
   private static drafters: { [key: string]: Drafter } = {};
 
-  public static getDrafter(
-    exercise: Exercise,
-    canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D
-  ) {
+  public static getDrafter(exercise: Exercise) {
     if (!DrafterFactory.drafters[exercise]) {
       DrafterFactory.drafters[exercise] = new DrafterFactory.draftersDict[
         exercise
-      ](canvas, ctx);
+      ]();
     }
 
     return DrafterFactory.drafters[exercise];

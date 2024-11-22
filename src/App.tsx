@@ -103,10 +103,13 @@ function CameraComponent({ selectedExercise, close }: CameraComponentProps) {
       setIsLoading(false);
 
       ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
-      if (!results?.poseLandmarks || !results.poseWorldLandmarks) return;
+      if (!results?.poseLandmarks || !results.poseWorldLandmarks) {
+        setExcersiseValidation(null);
+        return;
+      }
 
-      const drafter = DrafterFactory.getDrafter(selectedExercise, canvas, ctx);
-      drafter.draw(results);
+      const drafter = DrafterFactory.getDrafter(selectedExercise);
+      drafter.draw(results, canvas, ctx);
 
       const validator = ValidatorFactory.getValidator(selectedExercise);
       const res = validator.validate(results);
@@ -164,7 +167,22 @@ function CameraComponent({ selectedExercise, close }: CameraComponentProps) {
         <GlobalCircularProgress />
       ) : (
         <div className="exercise-feedback-container">
-          <p>...</p>
+          {(() => {
+            let color = "";
+            let message = "";
+            if (!exerciseValidation) {
+              color = "yellow";
+              message = "Aguardando posição";
+            } else if (!exerciseValidation.error) {
+              color = "green";
+              message = "Exercício correto!";
+            } else {
+              color = "red";
+              message = exerciseValidation.error;
+            }
+
+            return <p style={{ color }}>{message}</p>;
+          })()}
 
           <Button
             variant="contained"
