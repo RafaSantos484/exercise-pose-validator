@@ -57,16 +57,18 @@ function GlobalCircularProgress() {
 
 type CameraComponentProps = {
   selectedExercise: Exercise;
+  close: () => void;
 };
-function CameraComponent({ selectedExercise }: CameraComponentProps) {
+function CameraComponent({ selectedExercise, close }: CameraComponentProps) {
   const [screenDim, setScreenDim] = useState(getScreenDim());
   const [isLoading, setIsLoading] = useState(true);
-  // const [camera, setCamera] = useState<Camera | null>(null);
+  // const [camera, setCamera] = useState<Camera | null | undefined>(undefined);
   const [exerciseValidation, setExcersiseValidation] =
     useState<ExerciseValidation | null>(null);
 
   const videoRef = useRef<HTMLVideoElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const cameraRef = useRef<Camera | null | undefined>(undefined);
 
   useEffect(() => {
     if (!videoRef.current || !canvasRef.current) return;
@@ -88,31 +90,23 @@ function CameraComponent({ selectedExercise }: CameraComponentProps) {
 
     // pose.onResults(onResults);
     pose.onResults((results) => {
+      if (cameraRef.current === null) {
+        return close();
+      }
+
       const canvas = canvasRef.current;
       const ctx = canvas?.getContext("2d");
-
       if (!ctx || !canvas) return;
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      if (!results) {
-        ctx.fillStyle = "transparent";
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-        return;
-      }
+      // ctx.clearRect(0, 0, canvas.width, canvas.height);
 
       setIsLoading(false);
 
       ctx.drawImage(results.image, 0, 0, canvas.width, canvas.height);
       if (!results?.poseLandmarks || !results.poseWorldLandmarks) return;
 
-      const drafter = DrafterFactory.getDrafter(
-        selectedExercise,
-        canvas,
-        ctx,
-        results
-      );
-      drafter.draw();
+      const drafter = DrafterFactory.getDrafter(selectedExercise, canvas, ctx);
+      drafter.draw(results);
 
       const validator = ValidatorFactory.getValidator(selectedExercise);
       const res = validator.validate(results);
@@ -129,10 +123,11 @@ function CameraComponent({ selectedExercise }: CameraComponentProps) {
 
     _camera.start();
     // setCamera(_camera);
+    cameraRef.current = _camera;
 
     // Cleanup ao desmontar o componente
     return () => {
-      _camera.stop();
+      // _camera.stop();
       pose.close();
     };
     // eslint-disable-next-line
@@ -152,8 +147,6 @@ function CameraComponent({ selectedExercise }: CameraComponentProps) {
 
   return (
     <>
-      {isLoading && <GlobalCircularProgress />}
-
       <video ref={videoRef} style={{ display: "none" }} muted />
       <canvas
         ref={canvasRef}
@@ -166,6 +159,25 @@ function CameraComponent({ selectedExercise }: CameraComponentProps) {
           top: 0,
         }}
       />
+
+      {isLoading ? (
+        <GlobalCircularProgress />
+      ) : (
+        <div className="exercise-feedback-container">
+          <p>...</p>
+
+          <Button
+            variant="contained"
+            onClick={() => {
+              cameraRef.current?.stop().then(() => {
+                cameraRef.current = null;
+              });
+            }}
+          >
+            Fechar Câmera
+          </Button>
+        </div>
+      )}
     </>
   );
 }
@@ -220,7 +232,12 @@ export default function App() {
           </Button>
         </div>
       )}
-      {isCameraOpen && <CameraComponent selectedExercise={selectedExercise} />}
+      {isCameraOpen && (
+        <CameraComponent
+          selectedExercise={selectedExercise}
+          close={() => setIsCameraOpen(false)}
+        />
+      )}
       {/* <span>{`Erro: ${exerciseValidation?.error || ""}`}</span>
 
       <video ref={videoRef} style={{ display: "none" }} muted />

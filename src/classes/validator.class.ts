@@ -114,11 +114,19 @@ class PlankValidator extends Validator {
   }
 }
 
-const validatorsDict: Record<Exercise, validatorChild> = {
-  plank: PlankValidator,
-};
 export class ValidatorFactory {
+  private static validatorsDict: Record<Exercise, validatorChild> = {
+    plank: PlankValidator,
+  };
+
+  private static validators: { [key: string]: Validator } = {};
+
   public static getValidator(exercise: Exercise) {
-    return new validatorsDict[exercise]();
+    if (!ValidatorFactory.validators[exercise]) {
+      ValidatorFactory.validators[exercise] =
+        new ValidatorFactory.validatorsDict[exercise]();
+    }
+
+    return ValidatorFactory.validators[exercise];
   }
 }

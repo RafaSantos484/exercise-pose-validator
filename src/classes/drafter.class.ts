@@ -8,17 +8,14 @@ class Drafter {
   protected selectedLandmarks: number[];
   protected canvas: HTMLCanvasElement;
   protected ctx: CanvasRenderingContext2D;
-  protected results: Results;
 
   constructor(
     canvas: HTMLCanvasElement,
     ctx: CanvasRenderingContext2D,
-    results: Results,
     selectedLandmarks?: number[]
   ) {
     this.canvas = canvas;
     this.ctx = ctx;
-    this.results = results;
     this.selectedLandmarks = selectedLandmarks || [];
   }
 
@@ -45,12 +42,12 @@ class Drafter {
     ctx.stroke();
   }
 
-  public draw() {
+  public draw(results: Results) {
     this.ctx.fillStyle = "red";
     this.ctx.strokeStyle = "red";
     this.ctx.lineWidth = 2;
 
-    this.results.poseLandmarks.forEach((landmark, idx) => {
+    results.poseLandmarks.forEach((landmark, idx) => {
       if (!this.selectedLandmarks.includes(idx)) return;
 
       const point = new Point3d(landmark);
@@ -60,12 +57,8 @@ class Drafter {
 }
 
 class PlankDrafter extends Drafter {
-  constructor(
-    canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D,
-    results: Results
-  ) {
-    super(canvas, ctx, results, [
+  constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
+    super(canvas, ctx, [
       landmarksDict.NOSE,
       landmarksDict.LEFT_ELBOW,
       landmarksDict.RIGHT_ELBOW,
@@ -80,9 +73,9 @@ class PlankDrafter extends Drafter {
     ]);
   }
 
-  public draw() {
-    super.draw();
-    const landmarks = this.results.poseLandmarks;
+  public draw(results: Results) {
+    super.draw(results);
+    const landmarks = results.poseLandmarks;
 
     const nosePoint = new Point3d(landmarks[landmarksDict.NOSE]);
 
@@ -103,16 +96,24 @@ class PlankDrafter extends Drafter {
   }
 }
 
-const draftersDict: Record<Exercise, Constructor<Drafter>> = {
-  plank: PlankDrafter,
-};
 export class DrafterFactory {
+  private static draftersDict: Record<Exercise, Constructor<Drafter>> = {
+    plank: PlankDrafter,
+  };
+
+  private static drafters: { [key: string]: Drafter } = {};
+
   public static getDrafter(
     exercise: Exercise,
     canvas: HTMLCanvasElement,
-    ctx: CanvasRenderingContext2D,
-    results: Results
+    ctx: CanvasRenderingContext2D
   ) {
-    return new draftersDict[exercise](canvas, ctx, results);
+    if (!DrafterFactory.drafters[exercise]) {
+      DrafterFactory.drafters[exercise] = new DrafterFactory.draftersDict[
+        exercise
+      ](canvas, ctx);
+    }
+
+    return DrafterFactory.drafters[exercise];
   }
 }

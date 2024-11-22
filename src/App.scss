@@ -14,24 +14,31 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
 
   .global-circular-progress {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
     display: flex;
     justify-content: center;
     align-items: center;
   }
 
-  .select-exercise-container {
+  .select-exercise-container,
+  .exercise-feedback-container {
     display: flex;
-    align-items: center;
-    justify-content: space-evenly;
     flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
     width: 100%;
-    height: 100%;
-    // background-color: gray;
+    height: 80%;
+  }
 
+  .select-exercise-container {
     > * {
       width: 80%;
     }
@@ -43,6 +50,10 @@ body {
       font-weight: 400;
       color: #1976d2;
     }
+  }
+
+  .exercise-feedback-container {
+    z-index: 1;
   }
 }
 
