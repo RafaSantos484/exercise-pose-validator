@@ -38,14 +38,58 @@ class PlankValidator extends Validator {
       originalHipMidPoint
     );
 
-    const shoulderMidPoint = Utils.getShouldersMidPoint(
-      landmarks,
+    const leftShoulderPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_SHOULDER],
       coordinatesSystem
     );
-    const hipMidPoint = Utils.getHipMidPoint(landmarks, coordinatesSystem);
-    const kneeMidPoint = Utils.getKneesMidPoint(landmarks, coordinatesSystem);
-    const heelMidPoint = Utils.getHeelsMidPoint(landmarks, coordinatesSystem);
-    const elbowMidPoint = Utils.getElbowsMidPoint(landmarks, coordinatesSystem);
+    const rightShoulderPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_SHOULDER],
+      coordinatesSystem
+    );
+    const shoulderMidPoint = leftShoulderPoint.getMidPoint(rightShoulderPoint);
+    const leftHipPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_HIP],
+      coordinatesSystem
+    );
+    const rightHipPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_HIP],
+      coordinatesSystem
+    );
+    const hipMidPoint = leftHipPoint.getMidPoint(rightHipPoint);
+    const leftKneePoint = new Point3d(
+      landmarks[landmarksDict.LEFT_KNEE],
+      coordinatesSystem
+    );
+    const rightKneePoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_KNEE],
+      coordinatesSystem
+    );
+    const kneeMidPoint = leftKneePoint.getMidPoint(rightKneePoint);
+    const leftHeelPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_HEEL],
+      coordinatesSystem
+    );
+    const rightHeelPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_HEEL],
+      coordinatesSystem
+    );
+    const heelMidPoint = leftHeelPoint.getMidPoint(rightHeelPoint);
+    const leftElbowPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_ELBOW],
+      coordinatesSystem
+    );
+    const rightElbowPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_ELBOW],
+      coordinatesSystem
+    );
+    const elbowMidPoint = leftElbowPoint.getMidPoint(rightElbowPoint);
+
+    const leftRightShoulderDiff =
+      leftShoulderPoint.subtract(rightShoulderPoint);
+    const leftRightHipDiff = leftHipPoint.subtract(rightHipPoint);
+    const leftRightKneeDiff = leftKneePoint.subtract(rightKneePoint);
+    const leftRightHeelDiff = leftHeelPoint.subtract(rightHeelPoint);
+    const leftRightElbowDiff = leftElbowPoint.subtract(rightElbowPoint);
 
     const shoulderHipMidAngle = shoulderMidPoint.getAngle(hipMidPoint);
     const shoulderKneeMidAngle = shoulderMidPoint.getAngle(kneeMidPoint);
@@ -55,11 +99,11 @@ class PlankValidator extends Validator {
     const response: ExerciseValidation = {
       error: "",
       points: [
-        shoulderMidPoint,
-        hipMidPoint,
-        kneeMidPoint,
-        heelMidPoint,
-        elbowMidPoint,
+        leftRightShoulderDiff,
+        leftRightHipDiff,
+        leftRightKneeDiff,
+        leftRightHeelDiff,
+        leftRightElbowDiff,
       ],
       angles: [
         shoulderHipMidAngle,
@@ -69,18 +113,44 @@ class PlankValidator extends Validator {
       ],
     };
 
-    if (Math.abs(shoulderHipMidAngle) > 10) {
-      response.error = "Ângulo entre ombros e quadril muito alto";
-    } else if (Math.abs(shoulderKneeMidAngle) > 20) {
-      response.error = "Ângulo entre ombros e joelhos muito alto";
-    } else if (shoulderHipMidAngle > shoulderKneeMidAngle) {
+    const maxDiff = 0.11;
+    if (
+      Math.abs(leftRightShoulderDiff.x) > maxDiff ||
+      Math.abs(leftRightShoulderDiff.y) > maxDiff
+    ) {
+      response.error = "Alinhe os ombros";
+    } else if (
+      Math.abs(leftRightHipDiff.x) > maxDiff ||
+      Math.abs(leftRightHipDiff.y) > maxDiff
+    ) {
+      response.error = "Alinhe os quadril";
+    } else if (
+      Math.abs(leftRightKneeDiff.x) > maxDiff ||
+      Math.abs(leftRightKneeDiff.y) > maxDiff
+    ) {
+      response.error = "Alinhe os joelhos";
+    } else if (
+      Math.abs(leftRightHeelDiff.x) > maxDiff ||
+      Math.abs(leftRightHeelDiff.y) > maxDiff
+    ) {
+      response.error = "Alinhe os calcanhares";
+    } else if (
+      Math.abs(leftRightElbowDiff.x) > maxDiff ||
+      Math.abs(leftRightElbowDiff.y) > maxDiff
+    ) {
+      response.error = "Alinhe os cotovelos";
+    } else if (Math.abs(shoulderHipMidAngle) > 5) {
+      response.error = "Alinhe os ombros e quadril";
+    } else if (shoulderKneeMidAngle < 0 || shoulderKneeMidAngle > 10) {
+      response.error = "Alinhe os ombros e joelhos";
+    } else if (shoulderKneeMidAngle + 2 < shoulderHipMidAngle) {
       response.error = "Eleve o quadril";
-    } else if (Math.abs(shoulderHeelMidAngle) > 20) {
-      response.error = "Ângulo entre ombros e calcanhares muito alto";
-    } else if (shoulderKneeMidAngle - shoulderHeelMidAngle > 5) {
+    } else if (shoulderHeelMidAngle < 0 || shoulderHeelMidAngle > 10) {
+      response.error = "Alinhe os ombros e calcanhares";
+    } else if (shoulderHeelMidAngle + 1 < shoulderKneeMidAngle) {
       response.error = "Eleve os joelhos";
-    } else if (Math.abs(90 - Math.abs(shoulderElbowMidAngle)) > 15) {
-      response.error = "Cotovelos não estão alinhados com os ombros";
+    } else if (Math.abs(90 - Math.abs(shoulderElbowMidAngle)) > 20) {
+      response.error = "Alinhe os ombros e cotovelos";
     }
 
     return response;
