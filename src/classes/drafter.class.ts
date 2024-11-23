@@ -96,9 +96,64 @@ class PlankDrafter extends Drafter {
   }
 }
 
+class SidePlankDrafter extends Drafter {
+  constructor() {
+    super([
+      landmarksDict.NOSE,
+      landmarksDict.LEFT_ELBOW,
+      landmarksDict.RIGHT_ELBOW,
+      landmarksDict.LEFT_SHOULDER,
+      landmarksDict.RIGHT_SHOULDER,
+      landmarksDict.LEFT_HIP,
+      landmarksDict.RIGHT_HIP,
+      landmarksDict.LEFT_KNEE,
+      landmarksDict.RIGHT_KNEE,
+      landmarksDict.LEFT_HEEL,
+      landmarksDict.RIGHT_HEEL,
+    ]);
+  }
+
+  public draw(
+    results: Results,
+    canvas: HTMLCanvasElement,
+    ctx: CanvasRenderingContext2D
+  ) {
+    super.draw(results, canvas, ctx);
+    const landmarks = results.poseLandmarks;
+
+    const nosePoint = new Point3d(landmarks[landmarksDict.NOSE]);
+
+    const shoulderLeftPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_SHOULDER]
+    );
+    const shoulderRightPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_SHOULDER]
+    );
+    const shoulderMidPoint = shoulderLeftPoint.getMidPoint(shoulderRightPoint);
+    this.drawLine(canvas, ctx, nosePoint, shoulderMidPoint);
+    this.drawLine(canvas, ctx, shoulderMidPoint, shoulderLeftPoint);
+    this.drawLine(canvas, ctx, shoulderMidPoint, shoulderRightPoint);
+
+    const hipMidPoint = Utils.getMidHipPoint(landmarks);
+    this.drawLine(canvas, ctx, shoulderMidPoint, hipMidPoint);
+
+    const kneeMidPoint = Utils.getMidKneePoint(landmarks);
+    this.drawLine(canvas, ctx, hipMidPoint, kneeMidPoint);
+
+    const heelMidPoint = Utils.getMidHeelPoint(landmarks);
+    this.drawLine(canvas, ctx, kneeMidPoint, heelMidPoint);
+
+    const leftElbowPoint = new Point3d(landmarks[landmarksDict.LEFT_ELBOW]);
+    let rightElbowPoint = new Point3d(landmarks[landmarksDict.RIGHT_ELBOW]);
+    this.drawLine(canvas, ctx, shoulderLeftPoint, leftElbowPoint);
+    this.drawLine(canvas, ctx, shoulderRightPoint, rightElbowPoint);
+  }
+}
+
 export class DrafterFactory {
   private static draftersDict: Record<Exercise, Constructor<Drafter>> = {
     plank: PlankDrafter,
+    side_plank: SidePlankDrafter,
   };
   private static instance: DrafterFactory | undefined = undefined;
 

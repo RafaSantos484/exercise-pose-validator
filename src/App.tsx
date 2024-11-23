@@ -18,7 +18,9 @@ import {
 } from "@mui/material";
 import { Exercise, exercisesTranslator } from "./types";
 
+// source: https://www.flaticon.com/
 import PlankImage from "./assets/plank.png";
+import SidePlankImage from "./assets/side-plank.png";
 
 function getScreenDim() {
   /*
@@ -42,6 +44,7 @@ function getScreenDim() {
 
 const exerciseImages: Record<Exercise, string> = {
   plank: PlankImage,
+  side_plank: SidePlankImage,
 };
 
 function GlobalCircularProgress() {

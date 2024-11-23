@@ -114,9 +114,23 @@ class PlankValidator extends Validator {
   }
 }
 
+export class SidePlankValidator extends Validator {
+  public validate(results: Results): ExerciseValidation {
+    // TODO...
+    const response: ExerciseValidation = {
+      error: "",
+      points: [],
+      angles: [],
+    };
+
+    return response;
+  }
+}
+
 export class ValidatorFactory {
   private static validatorsDict: Record<Exercise, validatorChild> = {
     plank: PlankValidator,
+    side_plank: SidePlankValidator,
   };
   private static instance: ValidatorFactory | undefined = undefined;
 
