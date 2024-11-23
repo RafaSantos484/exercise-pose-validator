@@ -20,9 +20,6 @@ import { Exercise, exercisesTranslator } from "./types";
 
 import PlankImage from "./assets/plank.png";
 
-const vh = window.innerHeight * 0.01;
-document.documentElement.style.setProperty("--vh", `${vh}px`);
-
 function getScreenDim() {
   /*
   return {
@@ -158,7 +155,7 @@ function CameraComponent({ selectedExercise, close }: CameraComponentProps) {
         width={screenDim.width}
         height={screenDim.height}
         style={{
-          border: "1px solid black",
+          // border: "1px solid black",
           position: "absolute",
           left: 0,
           top: 0,
@@ -214,6 +211,16 @@ export default function App() {
     selectedExerciseRef.current = selectedExercise;
     isCameraOpenRef.current = isCameraOpen;
   }, [selectedExercise, isCameraOpen]);
+
+  useEffect(() => {
+    const onResize = () => {
+      const vh = window.innerHeight * 0.01;
+      document.documentElement.style.setProperty("--vh", `${vh}px`);
+    };
+    onResize();
+    window.addEventListener("resize", onResize);
+    return () => window.removeEventListener("resize", onResize);
+  }, []);
 
   return (
     <div className="app-container">
