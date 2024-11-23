@@ -54,15 +54,24 @@ type validatorChild = Constructor<Validator>;
 class PlankValidator extends Validator {
   public validate(results: Results): ExerciseValidation {
     const landmarks = results.poseWorldLandmarks;
-    const noseOriginalPoint = new Point3d(landmarks[landmarksDict.NOSE]);
-    const leftHipOriginalPoint = new Point3d(landmarks[landmarksDict.LEFT_HIP]);
-    const rightHipOriginalPoint = new Point3d(
+    const originalLeftHipPoint = new Point3d(landmarks[landmarksDict.LEFT_HIP]);
+    const originalRightHipPoint = new Point3d(
       landmarks[landmarksDict.RIGHT_HIP]
     );
+    const originalHipMidPoint = originalLeftHipPoint.getMidPoint(
+      originalRightHipPoint
+    );
+    const originalFootIndexMidPoint = Utils.getMidFootIndexPoint(landmarks);
+    const originalElbowsMidPoint = Utils.getMidElbowPoint(landmarks);
+
+    const zAxisVector = originalRightHipPoint.subtract(originalLeftHipPoint);
+    const xAxisVector = originalElbowsMidPoint.subtract(
+      originalFootIndexMidPoint
+    );
     const coordinatesSystem = new CoordinatesSystem(
-      leftHipOriginalPoint,
-      rightHipOriginalPoint,
-      noseOriginalPoint
+      [zAxisVector, "z"],
+      [xAxisVector, "x"],
+      originalHipMidPoint
     );
 
     const shoulderMidPoint = Utils.getMidShoulderPoint(

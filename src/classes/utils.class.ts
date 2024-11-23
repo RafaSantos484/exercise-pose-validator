@@ -72,4 +72,21 @@ export default class Utils {
       coordinatesSystem
     );
   }
+
+  public static getMidFootIndexPoint(
+    landmarks: LandmarkList,
+    coordinatesSystem?: CoordinatesSystem
+  ) {
+    const leftFootIndexPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_FOOT_INDEX]
+    );
+    const rightFootIndexPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_FOOT_INDEX]
+    );
+    return Utils.getMidPoint(
+      leftFootIndexPoint,
+      rightFootIndexPoint,
+      coordinatesSystem
+    );
+  }
 }

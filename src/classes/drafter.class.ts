@@ -55,7 +55,6 @@ class Drafter {
 class PlankDrafter extends Drafter {
   constructor() {
     super([
-      landmarksDict.NOSE,
       landmarksDict.LEFT_ELBOW,
       landmarksDict.RIGHT_ELBOW,
       landmarksDict.LEFT_SHOULDER,
@@ -66,6 +65,8 @@ class PlankDrafter extends Drafter {
       landmarksDict.RIGHT_KNEE,
       landmarksDict.LEFT_HEEL,
       landmarksDict.RIGHT_HEEL,
+      landmarksDict.LEFT_FOOT_INDEX,
+      landmarksDict.RIGHT_FOOT_INDEX,
     ]);
   }
 
@@ -77,10 +78,7 @@ class PlankDrafter extends Drafter {
     super.draw(results, canvas, ctx);
     const landmarks = results.poseLandmarks;
 
-    const nosePoint = new Point3d(landmarks[landmarksDict.NOSE]);
-
     const shoulderMidPoint = Utils.getMidShoulderPoint(landmarks);
-    this.drawLine(canvas, ctx, nosePoint, shoulderMidPoint);
 
     const hipMidPoint = Utils.getMidHipPoint(landmarks);
     this.drawLine(canvas, ctx, shoulderMidPoint, hipMidPoint);
@@ -90,6 +88,9 @@ class PlankDrafter extends Drafter {
 
     const heelMidPoint = Utils.getMidHeelPoint(landmarks);
     this.drawLine(canvas, ctx, kneeMidPoint, heelMidPoint);
+
+    const footIndexMidPoint = Utils.getMidFootIndexPoint(landmarks);
+    this.drawLine(canvas, ctx, heelMidPoint, footIndexMidPoint);
 
     const elbowMidPoint = Utils.getMidElbowPoint(landmarks);
     this.drawLine(canvas, ctx, shoulderMidPoint, elbowMidPoint);
