@@ -2,43 +2,7 @@ import { Results } from "@mediapipe/pose";
 import Point3d from "./point3d.class";
 import CoordinatesSystem from "./coordinates-system.class";
 import Utils from "./utils.class";
-import { Constructor, Exercise } from "../types";
-
-export const landmarksDict = {
-  NOSE: 0,
-  LEFT_EYE_INNER: 1,
-  LEFT_EYE: 2,
-  LEFT_EYE_OUTER: 3,
-  RIGHT_EYE_INNER: 4,
-  RIGHT_EYE: 5,
-  RIGHT_EYE_OUTER: 6,
-  LEFT_EAR: 7,
-  RIGHT_EAR: 8,
-  MOUTH_LEFT: 9,
-  MOUTH_RIGHT: 10,
-  LEFT_SHOULDER: 11,
-  RIGHT_SHOULDER: 12,
-  LEFT_ELBOW: 13,
-  RIGHT_ELBOW: 14,
-  LEFT_WRIST: 15,
-  RIGHT_WRIST: 16,
-  LEFT_PINKY: 17,
-  RIGHT_PINKY: 18,
-  LEFT_INDEX: 19,
-  RIGHT_INDEX: 20,
-  LEFT_THUMB: 21,
-  RIGHT_THUMB: 22,
-  LEFT_HIP: 23,
-  RIGHT_HIP: 24,
-  LEFT_KNEE: 25,
-  RIGHT_KNEE: 26,
-  LEFT_ANKLE: 27,
-  RIGHT_ANKLE: 28,
-  LEFT_HEEL: 29,
-  RIGHT_HEEL: 30,
-  LEFT_FOOT_INDEX: 31,
-  RIGHT_FOOT_INDEX: 32,
-};
+import { Constructor, Exercise, landmarksDict } from "../types";
 
 export type ExerciseValidation = {
   error: string;
@@ -65,8 +29,8 @@ class PlankValidator extends Validator {
     const originalElbowsMidPoint = Utils.getElbowsMidPoint(landmarks);
 
     const zAxisVector = originalRightHipPoint.subtract(originalLeftHipPoint);
-    const xAxisVector = originalElbowsMidPoint.subtract(
-      originalFootIndexMidPoint
+    const xAxisVector = originalFootIndexMidPoint.subtract(
+      originalElbowsMidPoint
     );
     const coordinatesSystem = new CoordinatesSystem(
       [zAxisVector, "z"],

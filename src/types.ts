@@ -40,35 +40,3 @@ export const landmarksDict = {
   LEFT_FOOT_INDEX: 31,
   RIGHT_FOOT_INDEX: 32,
 };
-
-/*
-export const importantPoints: Record<Exercise, number[]> = {
-  plank: [
-    landmarksDict.LEFT_ELBOW,
-    landmarksDict.RIGHT_ELBOW,
-    landmarksDict.LEFT_SHOULDER,
-    landmarksDict.RIGHT_SHOULDER,
-    landmarksDict.LEFT_HIP,
-    landmarksDict.RIGHT_HIP,
-    landmarksDict.LEFT_KNEE,
-    landmarksDict.RIGHT_KNEE,
-    landmarksDict.LEFT_HEEL,
-    landmarksDict.RIGHT_HEEL,
-    landmarksDict.LEFT_FOOT_INDEX,
-    landmarksDict.RIGHT_FOOT_INDEX,
-  ],
-  side_plank: [
-    landmarksDict.NOSE,
-    landmarksDict.LEFT_ELBOW,
-    landmarksDict.RIGHT_ELBOW,
-    landmarksDict.LEFT_SHOULDER,
-    landmarksDict.RIGHT_SHOULDER,
-    landmarksDict.LEFT_HIP,
-    landmarksDict.RIGHT_HIP,
-    landmarksDict.LEFT_KNEE,
-    landmarksDict.RIGHT_KNEE,
-    landmarksDict.LEFT_HEEL,
-    landmarksDict.RIGHT_HEEL,
-  ],
-};
-*/

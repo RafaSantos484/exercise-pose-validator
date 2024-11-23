@@ -1,8 +1,7 @@
 import { Results } from "@mediapipe/pose";
-import { landmarksDict } from "./validator.class";
 import Point3d from "./point3d.class";
 import Utils from "./utils.class";
-import { Constructor, Exercise } from "../types";
+import { Constructor, Exercise, landmarksDict } from "../types";
 
 class Drafter {
   protected selectedLandmarks: number[];
