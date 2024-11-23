@@ -70,17 +70,13 @@ function CameraComponent({ selectedExercise, close }: CameraComponentProps) {
   useEffect(() => {
     if (!videoRef.current || !canvasRef.current) return;
 
-    // Configurar MediaPipe Pose
     const pose = new Pose({
       locateFile: (file) =>
         `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`,
     });
-
     pose.setOptions({
       modelComplexity: 1,
       smoothLandmarks: true,
-      enableSegmentation: true,
-      smoothSegmentation: true,
       minDetectionConfidence: 0.5,
       minTrackingConfidence: 0.5,
     });
