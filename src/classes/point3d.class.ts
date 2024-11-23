@@ -1,4 +1,5 @@
 import { Landmark } from "@mediapipe/pose";
+import CoordinatesSystem from "./coordinates-system.class";
 
 type Point3dTuple = [number, number, number];
 
@@ -7,7 +8,10 @@ export default class Point3d {
   public y: number;
   public z: number;
 
-  constructor(landmark: Landmark | Point3dTuple) {
+  constructor(
+    landmark: Landmark | Point3dTuple,
+    coordinatesSystem?: CoordinatesSystem
+  ) {
     if (Array.isArray(landmark)) {
       this.x = landmark[0];
       this.y = landmark[1];
@@ -16,6 +20,10 @@ export default class Point3d {
       this.x = landmark.x;
       this.y = landmark.y;
       this.z = landmark.z;
+    }
+
+    if (!!coordinatesSystem) {
+      return coordinatesSystem.convert(this);
     }
   }
 
@@ -27,8 +35,14 @@ export default class Point3d {
     ]);
   }
 
-  public getAngle(p2: Point3d) {
-    let tang = (p2.y - this.y) / (p2.x - this.x);
+  public getAngle(p2?: Point3d, useAbs = false) {
+    let deltaY = !!p2 ? p2.y - this.y : this.y;
+    let deltaX = !!p2 ? p2.x - this.x : this.x;
+    if (useAbs) {
+      deltaY = Math.abs(deltaY);
+      deltaX = Math.abs(deltaX);
+    }
+    const tang = deltaY / deltaX;
     return Math.atan(tang) * (180 / Math.PI);
   }
 

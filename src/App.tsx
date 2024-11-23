@@ -185,6 +185,7 @@ function CameraComponent({ selectedExercise, close }: CameraComponentProps) {
           <Button
             variant="contained"
             onClick={() => {
+              alert(exerciseValidation?.points);
               alert(exerciseValidation?.angles);
               cameraRef.current?.stop().then(() => {
                 cameraRef.current = null;

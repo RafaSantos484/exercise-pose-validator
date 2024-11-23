@@ -78,21 +78,21 @@ class PlankDrafter extends Drafter {
     super.draw(results, canvas, ctx);
     const landmarks = results.poseLandmarks;
 
-    const shoulderMidPoint = Utils.getMidShoulderPoint(landmarks);
+    const shoulderMidPoint = Utils.getShouldersMidPoint(landmarks);
 
-    const hipMidPoint = Utils.getMidHipPoint(landmarks);
+    const hipMidPoint = Utils.getHipMidPoint(landmarks);
     this.drawLine(canvas, ctx, shoulderMidPoint, hipMidPoint);
 
-    const kneeMidPoint = Utils.getMidKneePoint(landmarks);
+    const kneeMidPoint = Utils.getKneesMidPoint(landmarks);
     this.drawLine(canvas, ctx, hipMidPoint, kneeMidPoint);
 
-    const heelMidPoint = Utils.getMidHeelPoint(landmarks);
+    const heelMidPoint = Utils.getHeelsMidPoint(landmarks);
     this.drawLine(canvas, ctx, kneeMidPoint, heelMidPoint);
 
-    const footIndexMidPoint = Utils.getMidFootIndexPoint(landmarks);
+    const footIndexMidPoint = Utils.getFootIndexesMidPoint(landmarks);
     this.drawLine(canvas, ctx, heelMidPoint, footIndexMidPoint);
 
-    const elbowMidPoint = Utils.getMidElbowPoint(landmarks);
+    const elbowMidPoint = Utils.getElbowsMidPoint(landmarks);
     this.drawLine(canvas, ctx, shoulderMidPoint, elbowMidPoint);
   }
 }
@@ -135,13 +135,13 @@ class SidePlankDrafter extends Drafter {
     this.drawLine(canvas, ctx, shoulderMidPoint, shoulderLeftPoint);
     this.drawLine(canvas, ctx, shoulderMidPoint, shoulderRightPoint);
 
-    const hipMidPoint = Utils.getMidHipPoint(landmarks);
+    const hipMidPoint = Utils.getHipMidPoint(landmarks);
     this.drawLine(canvas, ctx, shoulderMidPoint, hipMidPoint);
 
-    const kneeMidPoint = Utils.getMidKneePoint(landmarks);
+    const kneeMidPoint = Utils.getKneesMidPoint(landmarks);
     this.drawLine(canvas, ctx, hipMidPoint, kneeMidPoint);
 
-    const heelMidPoint = Utils.getMidHeelPoint(landmarks);
+    const heelMidPoint = Utils.getHeelsMidPoint(landmarks);
     this.drawLine(canvas, ctx, kneeMidPoint, heelMidPoint);
 
     const leftElbowPoint = new Point3d(landmarks[landmarksDict.LEFT_ELBOW]);

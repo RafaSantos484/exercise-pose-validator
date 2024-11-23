@@ -1,7 +1,7 @@
 import { LandmarkList } from "@mediapipe/pose";
-import { landmarksDict } from "./validator.class";
 import Point3d from "./point3d.class";
 import CoordinatesSystem from "./coordinates-system.class";
+import { landmarksDict } from "../types";
 
 export default class Utils {
   private static getMidPoint(
@@ -16,7 +16,7 @@ export default class Utils {
     return p1.getMidPoint(p2);
   }
 
-  public static getMidShoulderPoint(
+  public static getShouldersMidPoint(
     landmarks: LandmarkList,
     coordinatesSystem?: CoordinatesSystem
   ) {
@@ -33,7 +33,7 @@ export default class Utils {
     );
   }
 
-  public static getMidHipPoint(
+  public static getHipMidPoint(
     landmarks: LandmarkList,
     coordinatesSystem?: CoordinatesSystem
   ) {
@@ -42,7 +42,7 @@ export default class Utils {
     return Utils.getMidPoint(leftHipPoint, rightHipPoint, coordinatesSystem);
   }
 
-  public static getMidKneePoint(
+  public static getKneesMidPoint(
     landmarks: LandmarkList,
     coordinatesSystem?: CoordinatesSystem
   ) {
@@ -51,7 +51,7 @@ export default class Utils {
     return Utils.getMidPoint(leftKneePoint, rightKneePoint, coordinatesSystem);
   }
 
-  public static getMidHeelPoint(
+  public static getHeelsMidPoint(
     landmarks: LandmarkList,
     coordinatesSystem?: CoordinatesSystem
   ) {
@@ -60,7 +60,7 @@ export default class Utils {
     return Utils.getMidPoint(leftHeelPoint, rightHeelPoint, coordinatesSystem);
   }
 
-  public static getMidElbowPoint(
+  public static getElbowsMidPoint(
     landmarks: LandmarkList,
     coordinatesSystem?: CoordinatesSystem
   ) {
@@ -73,7 +73,7 @@ export default class Utils {
     );
   }
 
-  public static getMidFootIndexPoint(
+  public static getFootIndexesMidPoint(
     landmarks: LandmarkList,
     coordinatesSystem?: CoordinatesSystem
   ) {
