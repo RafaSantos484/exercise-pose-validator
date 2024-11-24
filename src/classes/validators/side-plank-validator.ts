@@ -147,12 +147,9 @@ export default class SidePlankValidator extends Validator {
       shoulderElbowAngle = rightShoulderPoint.getAngle(rightElbowPoint, true);
     }
 
-    const leftRightShoulderDiff =
-      leftShoulderPoint.subtract(rightShoulderPoint);
     const leftRightHipDiff = leftHipPoint.subtract(rightHipPoint);
     const leftRightKneeDiff = leftKneePoint.subtract(rightKneePoint);
     const leftRightHeelDiff = leftHeelPoint.subtract(rightHeelPoint);
-    const leftRightElbowDiff = leftElbowPoint.subtract(rightElbowPoint);
 
     const shoulderHipMidAngle = shoulderMidPoint.getAngle(hipMidPoint);
     const shoulderKneeMidAngle = shoulderMidPoint.getAngle(kneeMidPoint);
@@ -161,13 +158,7 @@ export default class SidePlankValidator extends Validator {
 
     const response: ExerciseValidation = {
       error: "",
-      points: [
-        leftRightShoulderDiff,
-        leftRightHipDiff,
-        leftRightKneeDiff,
-        leftRightHeelDiff,
-        leftRightElbowDiff,
-      ],
+      points: [leftRightHipDiff, leftRightKneeDiff, leftRightHeelDiff],
       angles: [
         shoulderHipMidAngle,
         shoulderKneeMidAngle,
@@ -176,8 +167,25 @@ export default class SidePlankValidator extends Validator {
       ],
     };
 
+    const maxXDiff = 0.1;
+    const maxYDiff = 0.2;
     const [minAngle, maxAngle] = [10, 30];
-    if (Math.abs(90 - shoulderElbowAngle) > 20) {
+    if (
+      Math.abs(leftRightHipDiff.x) > maxXDiff ||
+      Math.abs(leftRightHipDiff.y) > maxYDiff
+    ) {
+      response.error = "Alinhe os quadril";
+    } else if (
+      Math.abs(leftRightKneeDiff.x) > maxXDiff ||
+      Math.abs(leftRightKneeDiff.y) > maxYDiff
+    ) {
+      response.error = "Alinhe os joelhos";
+    } else if (
+      Math.abs(leftRightHeelDiff.x) > maxXDiff ||
+      Math.abs(leftRightHeelDiff.y) > maxYDiff
+    ) {
+      response.error = "Alinhe os calcanhares";
+    } else if (Math.abs(90 - shoulderElbowAngle) > 20) {
       response.error = "Alinhe os ombro com o cotovelo apoiado ao chão";
     } else if (
       shoulderHipMidAngle < minAngle ||
