@@ -206,13 +206,13 @@ export class SidePlankValidator extends Validator {
       ],
     };
 
-    if (shouldersHipMidAngle > 10) {
+    if (shouldersHipMidAngle > 5) {
       response.error = "Alinhe os ombros com o quadril";
-    } else if (shouldersKnessMidAngle > 10) {
+    } else if (shouldersKnessMidAngle > 5) {
       response.error = "Alinhe os ombros com os joelhos";
     } else if (Math.abs(shouldersHipMidAngle - shouldersKnessMidAngle) > 3) {
       response.error = "Alinhe os joelhos com o quadril";
-    } else if (shouldersHeelsMidAngle > 10) {
+    } else if (shouldersHeelsMidAngle > 5) {
       response.error = "Alinhe os ombros com os calcanhares";
     } else if (Math.abs(shouldersKnessMidAngle - shouldersHeelsMidAngle) > 3) {
       response.error = "Alinhe os calcanhares com os joelhos";
