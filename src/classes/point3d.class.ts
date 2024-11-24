@@ -27,6 +27,10 @@ export default class Point3d {
     }
   }
 
+  public getXYDistance(p2: Point3d) {
+    return Math.sqrt((this.x - p2.x) ** 2 + (this.y - p2.y) ** 2);
+  }
+
   public getMidPoint(p2: Point3d) {
     return new Point3d([
       (this.x + p2.x) / 2,

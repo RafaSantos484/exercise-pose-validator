@@ -158,6 +158,54 @@ class PlankValidator extends Validator {
 }
 
 export class SidePlankValidator extends Validator {
+  private isLeftShoulderOnGround(results: Results) {
+    const landmarks = results.poseLandmarks;
+    const { width, height } = results.image;
+
+    const leftShoulderPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_SHOULDER]
+    );
+    leftShoulderPoint.x *= width;
+    leftShoulderPoint.y *= height;
+    const leftElbowPoint = new Point3d(landmarks[landmarksDict.LEFT_ELBOW]);
+    leftElbowPoint.x *= width;
+    leftElbowPoint.y *= height;
+    const leftFootIndexPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_FOOT_INDEX]
+    );
+    leftFootIndexPoint.x *= width;
+    leftFootIndexPoint.y *= height;
+    const rightShoulderPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_SHOULDER]
+    );
+    rightShoulderPoint.x *= width;
+    rightShoulderPoint.y *= height;
+    const rightElbowPoint = new Point3d(landmarks[landmarksDict.RIGHT_ELBOW]);
+    rightElbowPoint.x *= width;
+    rightElbowPoint.y *= height;
+    const rightFootIndexPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_FOOT_INDEX]
+    );
+    rightFootIndexPoint.x *= width;
+    rightFootIndexPoint.y *= height;
+
+    const leftCathet1 = leftShoulderPoint.getXYDistance(leftElbowPoint);
+    const leftCathet2 = leftElbowPoint.getXYDistance(leftFootIndexPoint);
+    const leftHypotenuse = leftShoulderPoint.getXYDistance(leftFootIndexPoint);
+    const leftDiff = Math.abs(
+      leftHypotenuse ** 2 - (leftCathet1 ** 2 + leftCathet2 ** 2)
+    );
+    const rightCathet1 = rightShoulderPoint.getXYDistance(rightElbowPoint);
+    const rightCathet2 = rightElbowPoint.getXYDistance(rightFootIndexPoint);
+    const rightHypotenuse =
+      rightShoulderPoint.getXYDistance(rightFootIndexPoint);
+    const rightDiff = Math.abs(
+      rightHypotenuse ** 2 - (rightCathet1 ** 2 + rightCathet2 ** 2)
+    );
+
+    return leftDiff < rightDiff;
+  }
+
   public validate(results: Results): ExerciseValidation {
     const landmarks = results.poseWorldLandmarks;
 
@@ -196,9 +244,13 @@ export class SidePlankValidator extends Validator {
       true
     );
 
+    const isLeftOnGround = this.isLeftShoulderOnGround(results);
+    // alert(`${leftDiff} ${rightDiff}`);
+    // alert(isLeftOnGround ? "left" : "right");
+
     const response: ExerciseValidation = {
       error: "",
-      points: [shouldersMidPoint, hipMidPoint, kneesMidPoint, heelsMidPoint],
+      points: [],
       angles: [
         shouldersHipMidAngle,
         shouldersKnessMidAngle,
