@@ -3,11 +3,9 @@ import { Pose } from "@mediapipe/pose";
 import { Camera } from "@mediapipe/camera_utils";
 
 import "./App.scss";
-import {
+import ValidatorFactory, {
   ExerciseValidation,
-  ValidatorFactory,
-} from "./classes/validator.class";
-import { DrafterFactory } from "./classes/drafter.class";
+} from "./classes/validators/validator.class";
 import {
   Button,
   CircularProgress,
@@ -21,6 +19,7 @@ import { Exercise, exercisesTranslator } from "./types";
 // source: https://www.flaticon.com/
 import PlankImage from "./assets/plank.png";
 import SidePlankImage from "./assets/side-plank.png";
+import DrafterFactory from "./classes/drafters/drafter.class";
 
 function getScreenDim() {
   /*
