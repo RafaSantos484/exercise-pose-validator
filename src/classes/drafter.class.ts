@@ -2,6 +2,7 @@ import { Results } from "@mediapipe/pose";
 import Point3d from "./point3d.class";
 import Utils from "./utils.class";
 import { Constructor, Exercise, landmarksDict } from "../types";
+import { SidePlankValidator } from "./validator.class";
 
 class Drafter {
   protected selectedLandmarks: number[];
@@ -147,6 +148,16 @@ class SidePlankDrafter extends Drafter {
     let rightElbowPoint = new Point3d(landmarks[landmarksDict.RIGHT_ELBOW]);
     this.drawLine(canvas, ctx, shoulderLeftPoint, leftElbowPoint);
     this.drawLine(canvas, ctx, shoulderRightPoint, rightElbowPoint);
+
+    const isLeftShoulderOnGround =
+      SidePlankValidator.IsLeftShoulderOnGround(results);
+    let elbowPoint: Point3d;
+    if (isLeftShoulderOnGround) {
+      elbowPoint = leftElbowPoint;
+    } else {
+      elbowPoint = rightElbowPoint;
+    }
+    this.drawLine(canvas, ctx, heelMidPoint, elbowPoint);
   }
 }
 

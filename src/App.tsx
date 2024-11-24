@@ -268,23 +268,6 @@ export default function App() {
           close={() => setIsCameraOpen(false)}
         />
       )}
-      {/* <span>{`Erro: ${exerciseValidation?.error || ""}`}</span>
-
-      <video ref={videoRef} style={{ display: "none" }} muted />
-      <canvas
-        ref={canvasRef}
-        width={screenDim.width}
-        height={screenDim.height}
-        style={{
-          // width: "100%",
-          // maxWidth: "640px",
-          border: "1px solid black",
-        }}
-      />
-
-      <button onClick={() => setIsCameraOpen(!isCameraOpen)}>
-        Toggle Camera
-      </button> */}
     </div>
   );
 }

@@ -3,6 +3,10 @@ import Point3d from "./point3d.class";
 import CoordinatesSystem from "./coordinates-system.class";
 import { landmarksDict } from "../types";
 
+type arccosineOptions = {
+  degrees?: boolean;
+  abs?: boolean;
+};
 export default class Utils {
   private static getMidPoint(
     p1: Point3d,
@@ -14,6 +18,19 @@ export default class Utils {
       p2 = coordinatesSystem.convert(p2);
     }
     return p1.getMidPoint(p2);
+  }
+
+  public static arccosine(angle: number, options?: arccosineOptions) {
+    const abs = options?.abs !== undefined ? options.abs : false;
+    const degrees = options?.degrees !== undefined ? options.degrees : true;
+    if (abs) {
+      angle = Math.abs(angle);
+    }
+    angle = Math.acos(angle);
+    if (degrees) {
+      angle *= 180 / Math.PI;
+    }
+    return angle;
   }
 
   public static getShouldersMidPoint(
