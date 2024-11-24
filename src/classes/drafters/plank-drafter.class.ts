@@ -1,7 +1,7 @@
 import { Results } from "@mediapipe/pose";
 import Utils from "../utils.class";
 import { landmarksDict } from "../../types";
-import { Drafter } from "./drafter.class";
+import Drafter from "./drafter.class";
 
 export default class PlankDrafter extends Drafter {
   constructor() {

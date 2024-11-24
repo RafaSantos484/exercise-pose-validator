@@ -1,10 +1,7 @@
 import { Results } from "@mediapipe/pose";
 import Point3d from "../point3d.class";
-import { Constructor, Exercise } from "../../types";
-import PlankDrafter from "./plank-drafter.class";
-import SidePlankDrafter from "./side-plank-drafter.class";
 
-export class Drafter {
+export default class Drafter {
   protected selectedLandmarks: number[];
 
   constructor(selectedLandmarks?: number[]) {
@@ -49,33 +46,5 @@ export class Drafter {
       const point = new Point3d(landmark);
       this.drawCircle(canvas, ctx, point, 4);
     });
-  }
-}
-
-export default class DrafterFactory {
-  private static draftersDict: Record<Exercise, Constructor<Drafter>> = {
-    plank: PlankDrafter,
-    side_plank: SidePlankDrafter,
-  };
-  private static instance: DrafterFactory | undefined = undefined;
-
-  private drafters: Record<string, Drafter>;
-
-  private constructor() {
-    this.drafters = {};
-  }
-
-  public static getInstance() {
-    if (!DrafterFactory.instance) {
-      DrafterFactory.instance = new DrafterFactory();
-    }
-    return DrafterFactory.instance;
-  }
-
-  public getDrafter(exercise: Exercise) {
-    if (!this.drafters[exercise]) {
-      this.drafters[exercise] = new DrafterFactory.draftersDict[exercise]();
-    }
-    return this.drafters[exercise];
   }
 }

@@ -94,43 +94,85 @@ export default class SidePlankValidator extends Validator {
       isLeftShoulderOnGround
     );
 
-    const shoulderPoint = new Point3d(
-      landmarks[
-        isLeftShoulderOnGround
-          ? landmarksDict.LEFT_SHOULDER
-          : landmarksDict.RIGHT_SHOULDER
-      ],
+    const leftShoulderPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_SHOULDER],
       coordinatesSystem
     );
-    const elbowPoint = new Point3d(
-      landmarks[
-        isLeftShoulderOnGround
-          ? landmarksDict.LEFT_ELBOW
-          : landmarksDict.RIGHT_ELBOW
-      ],
+    const rightShoulderPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_SHOULDER],
       coordinatesSystem
     );
-    const shouldersMidPoint = Utils.getShouldersMidPoint(
-      landmarks,
+    const shoulderMidPoint = leftShoulderPoint.getMidPoint(rightShoulderPoint);
+    const leftHipPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_HIP],
       coordinatesSystem
     );
-    const hipMidPoint = Utils.getHipMidPoint(landmarks, coordinatesSystem);
-    const kneesMidPoint = Utils.getKneesMidPoint(landmarks, coordinatesSystem);
-    const heelsMidPoint = Utils.getHeelsMidPoint(landmarks, coordinatesSystem);
+    const rightHipPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_HIP],
+      coordinatesSystem
+    );
+    const hipMidPoint = leftHipPoint.getMidPoint(rightHipPoint);
+    const leftKneePoint = new Point3d(
+      landmarks[landmarksDict.LEFT_KNEE],
+      coordinatesSystem
+    );
+    const rightKneePoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_KNEE],
+      coordinatesSystem
+    );
+    const kneeMidPoint = leftKneePoint.getMidPoint(rightKneePoint);
+    const leftHeelPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_HEEL],
+      coordinatesSystem
+    );
+    const rightHeelPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_HEEL],
+      coordinatesSystem
+    );
+    const heelMidPoint = leftHeelPoint.getMidPoint(rightHeelPoint);
+    const leftElbowPoint = new Point3d(
+      landmarks[landmarksDict.LEFT_ELBOW],
+      coordinatesSystem
+    );
+    const rightElbowPoint = new Point3d(
+      landmarks[landmarksDict.RIGHT_ELBOW],
+      coordinatesSystem
+    );
+    const elbowMidPoint = leftElbowPoint.getMidPoint(rightElbowPoint);
 
-    const shouldersHipMidAngle = shouldersMidPoint.getAngle(hipMidPoint);
-    const shouldersKnessMidAngle = shouldersMidPoint.getAngle(kneesMidPoint);
-    const shouldersHeelsMidAngle = shouldersMidPoint.getAngle(heelsMidPoint);
-    const shoulderElbowAngle = shoulderPoint.getAngle(elbowPoint, true);
+    let shoulderElbowAngle: number;
+    if (isLeftShoulderOnGround) {
+      shoulderElbowAngle = leftShoulderPoint.getAngle(leftElbowPoint, true);
+    } else {
+      shoulderElbowAngle = rightShoulderPoint.getAngle(rightElbowPoint, true);
+    }
+
+    const leftRightShoulderDiff =
+      leftShoulderPoint.subtract(rightShoulderPoint);
+    const leftRightHipDiff = leftHipPoint.subtract(rightHipPoint);
+    const leftRightKneeDiff = leftKneePoint.subtract(rightKneePoint);
+    const leftRightHeelDiff = leftHeelPoint.subtract(rightHeelPoint);
+    const leftRightElbowDiff = leftElbowPoint.subtract(rightElbowPoint);
+
+    const shoulderHipMidAngle = shoulderMidPoint.getAngle(hipMidPoint);
+    const shoulderKneeMidAngle = shoulderMidPoint.getAngle(kneeMidPoint);
+    const shoulderHeelMidAngle = shoulderMidPoint.getAngle(heelMidPoint);
+    const shoulderElbowMidAngle = shoulderMidPoint.getAngle(elbowMidPoint);
 
     const response: ExerciseValidation = {
       error: "",
-      points: [shouldersMidPoint, hipMidPoint, kneesMidPoint, heelsMidPoint],
+      points: [
+        leftRightShoulderDiff,
+        leftRightHipDiff,
+        leftRightKneeDiff,
+        leftRightHeelDiff,
+        leftRightElbowDiff,
+      ],
       angles: [
-        shouldersHipMidAngle,
-        shouldersKnessMidAngle,
-        shouldersHeelsMidAngle,
-        shoulderElbowAngle,
+        shoulderHipMidAngle,
+        shoulderKneeMidAngle,
+        shoulderHeelMidAngle,
+        shoulderElbowMidAngle,
       ],
     };
 
@@ -138,25 +180,25 @@ export default class SidePlankValidator extends Validator {
     if (Math.abs(90 - shoulderElbowAngle) > 20) {
       response.error = "Alinhe os ombro com o cotovelo apoiado ao chão";
     } else if (
-      shouldersHipMidAngle < minAngle ||
-      shouldersHipMidAngle > maxAngle
+      shoulderHipMidAngle < minAngle ||
+      shoulderHipMidAngle > maxAngle
     ) {
       response.error = "Alinhe os ombros com o quadril";
     } else if (
-      shouldersKnessMidAngle < minAngle ||
-      shouldersKnessMidAngle > maxAngle
+      shoulderKneeMidAngle < minAngle ||
+      shoulderKneeMidAngle > maxAngle
     ) {
       response.error = "Alinhe os ombros com os joelhos";
-    } else if (shouldersKnessMidAngle + 2 < shouldersHipMidAngle) {
+    } else if (shoulderKneeMidAngle + 2 < shoulderHipMidAngle) {
       response.error = "Abaixe os joelhos";
-    } else if (shouldersKnessMidAngle - shouldersHipMidAngle > 5) {
+    } else if (shoulderKneeMidAngle - shoulderHipMidAngle > 5) {
       response.error = "Alinhe os joelhos com o quadril";
     } else if (
-      shouldersHeelsMidAngle < minAngle ||
-      shouldersHeelsMidAngle > maxAngle
+      shoulderHeelMidAngle < minAngle ||
+      shoulderHeelMidAngle > maxAngle
     ) {
       response.error = "Alinhe os ombros com os calcanhares";
-    } else if (Math.abs(shouldersHipMidAngle - shouldersHeelsMidAngle) > 5) {
+    } else if (Math.abs(shoulderHipMidAngle - shoulderHeelMidAngle) > 5) {
       response.error = "Alinhe o quadril com os calcanhares";
     }
 

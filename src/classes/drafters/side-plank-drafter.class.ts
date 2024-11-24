@@ -3,7 +3,7 @@ import Point3d from "../point3d.class";
 import Utils from "../utils.class";
 import { landmarksDict } from "../../types";
 import SidePlankValidator from "../validators/side-plank-validator";
-import { Drafter } from "./drafter.class";
+import Drafter from "./drafter.class";
 
 export default class SidePlankDrafter extends Drafter {
   constructor() {
