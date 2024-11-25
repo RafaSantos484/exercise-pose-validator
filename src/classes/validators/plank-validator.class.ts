@@ -79,7 +79,7 @@ export default class PlankValidator extends Validator {
     const leftRightHipDiff = leftHipPoint.subtract(rightHipPoint);
     const leftRightKneeDiff = leftKneePoint.subtract(rightKneePoint);
     const leftRightHeelDiff = leftHeelPoint.subtract(rightHeelPoint);
-    const leftRightElbowDiff = leftElbowPoint.subtract(rightElbowPoint);
+    // const leftRightElbowDiff = leftElbowPoint.subtract(rightElbowPoint);
 
     const shoulderHipMidAngle = shoulderMidPoint.getAngle(hipMidPoint);
     const shoulderKneeMidAngle = shoulderMidPoint.getAngle(kneeMidPoint);
@@ -93,7 +93,7 @@ export default class PlankValidator extends Validator {
         leftRightHipDiff,
         leftRightKneeDiff,
         leftRightHeelDiff,
-        leftRightElbowDiff,
+        // leftRightElbowDiff,
       ],
       angles: [
         shoulderHipMidAngle,
@@ -103,7 +103,7 @@ export default class PlankValidator extends Validator {
       ],
     };
 
-    const maxDiff = 0.11;
+    const maxDiff = 0.15;
     if (
       Math.abs(leftRightShoulderDiff.x) > maxDiff ||
       Math.abs(leftRightShoulderDiff.y) > maxDiff
@@ -124,12 +124,15 @@ export default class PlankValidator extends Validator {
       Math.abs(leftRightHeelDiff.y) > maxDiff
     ) {
       response.error = "Alinhe os calcanhares";
-    } else if (
+    } else if (Math.abs(shoulderHipMidAngle) > 5) {
+    /*
+    else if (
       Math.abs(leftRightElbowDiff.x) > maxDiff ||
       Math.abs(leftRightElbowDiff.y) > maxDiff
     ) {
       response.error = "Alinhe os cotovelos";
-    } else if (Math.abs(shoulderHipMidAngle) > 5) {
+    } 
+    */
       response.error = "Alinhe os ombros e quadril";
     } else if (shoulderKneeMidAngle < 0 || shoulderKneeMidAngle > 10) {
       response.error = "Alinhe os ombros e joelhos";
@@ -139,7 +142,7 @@ export default class PlankValidator extends Validator {
       response.error = "Alinhe os ombros e calcanhares";
     } else if (shoulderHeelMidAngle + 1 < shoulderKneeMidAngle) {
       response.error = "Eleve os joelhos";
-    } else if (Math.abs(90 - Math.abs(shoulderElbowMidAngle)) > 20) {
+    } else if (Math.abs(90 - Math.abs(shoulderElbowMidAngle)) > 30) {
       response.error = "Alinhe os ombros e cotovelos";
     }
 
