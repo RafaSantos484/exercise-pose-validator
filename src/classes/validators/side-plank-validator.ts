@@ -168,13 +168,13 @@ export default class SidePlankValidator extends Validator {
     };
 
     const maxXDiff = 0.1;
-    const maxYDiff = 0.2;
-    const [minAngle, maxAngle] = [10, 30];
+    const maxYDiff = 0.25;
+    const [minAngle, maxAngle] = [10, 35];
     if (
       Math.abs(leftRightHipDiff.x) > maxXDiff ||
       Math.abs(leftRightHipDiff.y) > maxYDiff
     ) {
-      response.error = "Alinhe os quadril";
+      response.error = "Alinhe o quadril";
     } else if (
       Math.abs(leftRightKneeDiff.x) > maxXDiff ||
       Math.abs(leftRightKneeDiff.y) > maxYDiff
@@ -206,7 +206,7 @@ export default class SidePlankValidator extends Validator {
       shoulderHeelMidAngle > maxAngle
     ) {
       response.error = "Alinhe os ombros com os calcanhares";
-    } else if (Math.abs(shoulderHipMidAngle - shoulderHeelMidAngle) > 5) {
+    } else if (Math.abs(shoulderHipMidAngle - shoulderHeelMidAngle) > 10) {
       response.error = "Alinhe o quadril com os calcanhares";
     }
 
