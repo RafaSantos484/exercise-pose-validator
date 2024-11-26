@@ -1,5 +1,6 @@
 import { Constructor, Exercise } from "../../types";
 import PlankValidator from "./plank-validator.class";
+import PushUpValidator from "./push-up-validator.class";
 import SidePlankValidator from "./side-plank-validator";
 import { Validator } from "./validator.class";
 
@@ -8,6 +9,7 @@ type validatorChild = Constructor<Validator>;
 export default class ValidatorFactory {
   private static validatorsDict: Record<Exercise, validatorChild> = {
     plank: PlankValidator,
+    push_up: PushUpValidator,
     side_plank: SidePlankValidator,
   };
   private static instance: ValidatorFactory | undefined = undefined;

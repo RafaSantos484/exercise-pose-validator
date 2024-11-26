@@ -16,6 +16,7 @@ import { Exercise, exercisesTranslator } from "./types";
 
 // source: https://www.flaticon.com/
 import PlankImage from "./assets/plank.png";
+import PushUpImage from "./assets/push-up.png";
 import SidePlankImage from "./assets/side-plank.png";
 import ValidatorFactory from "./classes/validators/validator-factory.class";
 import DrafterFactory from "./classes/drafters/drafter-factory.class";
@@ -42,6 +43,7 @@ function getScreenDim() {
 
 const exerciseImages: Record<Exercise, string> = {
   plank: PlankImage,
+  push_up: PushUpImage,
   side_plank: SidePlankImage,
 };
 

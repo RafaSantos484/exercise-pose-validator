@@ -90,6 +90,19 @@ export default class Utils {
     );
   }
 
+  public static getWristsMidPoint(
+    landmarks: LandmarkList,
+    coordinatesSystem?: CoordinatesSystem
+  ) {
+    const leftWristPoint = new Point3d(landmarks[landmarksDict.LEFT_WRIST]);
+    const rightWristPoint = new Point3d(landmarks[landmarksDict.RIGHT_WRIST]);
+    return Utils.getMidPoint(
+      leftWristPoint,
+      rightWristPoint,
+      coordinatesSystem
+    );
+  }
+
   public static getFootIndexesMidPoint(
     landmarks: LandmarkList,
     coordinatesSystem?: CoordinatesSystem
