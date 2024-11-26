@@ -8,6 +8,7 @@ import {
   Button,
   CircularProgress,
   FormControl,
+  IconButton,
   InputLabel,
   MenuItem,
   Select,
@@ -20,6 +21,7 @@ import PushUpImage from "./assets/push-up.png";
 import SidePlankImage from "./assets/side-plank.png";
 import ValidatorFactory from "./classes/validators/validator-factory.class";
 import DrafterFactory from "./classes/drafters/drafter-factory.class";
+import { GitHub } from "@mui/icons-material";
 
 function getScreenDim() {
   /*
@@ -229,9 +231,20 @@ export default function App() {
     <div className="app-container">
       {!isCameraOpen && (
         <div className="select-exercise-container">
+          <IconButton
+            className="corner-icon"
+            onClick={() => {
+              window.open(
+                "https://github.com/RafaSantos484/exercise-pose-validator"
+              );
+            }}
+          >
+            <GitHub />
+          </IconButton>
+
           <h1>Validador de Exercícios</h1>
 
-          <FormControl fullWidth>
+          <FormControl fullWidth sx={{ maxWidth: "350px" }}>
             <InputLabel id="select-exercise-label">Exercício</InputLabel>
             <Select
               labelId="select-exercise-label"
