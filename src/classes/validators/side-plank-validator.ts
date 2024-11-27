@@ -138,7 +138,6 @@ export default class SidePlankValidator extends Validator {
       landmarks[landmarksDict.RIGHT_ELBOW],
       coordinatesSystem
     );
-    const elbowMidPoint = leftElbowPoint.getMidPoint(rightElbowPoint);
 
     let shoulderElbowAngle: number;
     if (isLeftShoulderOnGround) {
@@ -154,7 +153,6 @@ export default class SidePlankValidator extends Validator {
     const shoulderHipMidAngle = shoulderMidPoint.getAngle(hipMidPoint);
     const shoulderKneeMidAngle = shoulderMidPoint.getAngle(kneeMidPoint);
     const shoulderHeelMidAngle = shoulderMidPoint.getAngle(heelMidPoint);
-    const shoulderElbowMidAngle = shoulderMidPoint.getAngle(elbowMidPoint);
 
     const response: ExerciseValidation = {
       error: "",
@@ -163,7 +161,7 @@ export default class SidePlankValidator extends Validator {
         shoulderHipMidAngle,
         shoulderKneeMidAngle,
         shoulderHeelMidAngle,
-        shoulderElbowMidAngle,
+        shoulderElbowAngle,
       ],
     };
 
