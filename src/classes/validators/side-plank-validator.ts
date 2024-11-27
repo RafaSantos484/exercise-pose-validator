@@ -167,7 +167,7 @@ export default class SidePlankValidator extends Validator {
 
     const maxXDiff = 0.1;
     const maxYDiff = 0.25;
-    const [minAngle, maxAngle] = [10, 35];
+    const [minAngle, maxAngle] = [-5, 35];
     if (
       Math.abs(leftRightHipDiff.x) > maxXDiff ||
       Math.abs(leftRightHipDiff.y) > maxYDiff
@@ -196,7 +196,7 @@ export default class SidePlankValidator extends Validator {
     ) {
       response.error = "Alinhe os ombros com os joelhos";
     } else if (shoulderKneeMidAngle + 2 < shoulderHipMidAngle) {
-      response.error = "Abaixe os joelhos";
+      response.error = "Alinhe os joelhos com o quadril";
     } else if (shoulderKneeMidAngle - shoulderHipMidAngle > 5) {
       response.error = "Alinhe os joelhos com o quadril";
     } else if (
