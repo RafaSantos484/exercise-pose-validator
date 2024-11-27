@@ -125,7 +125,7 @@ export default class PlankValidator extends Validator {
     ) {
       response.error = "Alinhe os calcanhares";
     } else if (Math.abs(shoulderHipMidAngle) > 5) {
-    /*
+      /*
     else if (
       Math.abs(leftRightElbowDiff.x) > maxDiff ||
       Math.abs(leftRightElbowDiff.y) > maxDiff
@@ -134,11 +134,11 @@ export default class PlankValidator extends Validator {
     } 
     */
       response.error = "Alinhe os ombros e quadril";
-    } else if (shoulderKneeMidAngle < 0 || shoulderKneeMidAngle > 10) {
+    } else if (shoulderKneeMidAngle < -5 || shoulderKneeMidAngle > 10) {
       response.error = "Alinhe os ombros e joelhos";
     } else if (shoulderKneeMidAngle + 2 < shoulderHipMidAngle) {
       response.error = "Eleve o quadril";
-    } else if (shoulderHeelMidAngle < 0 || shoulderHeelMidAngle > 10) {
+    } else if (shoulderHeelMidAngle < -5 || shoulderHeelMidAngle > 10) {
       response.error = "Alinhe os ombros e calcanhares";
     } else if (shoulderHeelMidAngle + 1 < shoulderKneeMidAngle) {
       response.error = "Eleve os joelhos";
