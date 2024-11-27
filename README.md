@@ -19,5 +19,8 @@ App Web desenvolvido em **React** com **TypeScript**, utilizando **MediaPipe** p
 
 - Confira o vídeo de demonstração abaixo:
 
-  [🚧](https://emojipedia.org/construction)
+
+https://github.com/user-attachments/assets/c97b6caa-0fe1-4ace-98b0-b9bcd31bc9b7
+
+
 - [Testar o app](https://exercise-pose-validator.vercel.app/)
