@@ -1,6 +1,6 @@
 # Exercise Pose Validator
 
-App Web desenvolvido em **React** com **TypeScript**, utilizando **MediaPipe** para validação de exercícios físicos através de estimativa de poses.
+Solução Web de visão computacional desenvolvida em **React** com **TypeScript** e **MediaPipe** para validação de exercícios físicos através de estimativa de poses.
 
 ## ✨ Funcionalidades
 
